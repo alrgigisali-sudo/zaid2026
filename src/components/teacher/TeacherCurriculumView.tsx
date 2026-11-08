@@ -291,21 +291,19 @@ export function TeacherCurriculumView() {
       : `توزيع منهج ${currentSubject?.title} - ${currentGrade.title} - ${semesterLabel} 1448هـ`;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 text-right" dir="rtl">
+    <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4 sm:space-y-6 text-right overflow-x-hidden" dir="rtl">
       {/* Top Interactive Configuration Panel (No-Print) */}
-      <section className="no-print bg-white rounded-xl border border-[#E5E7EB] p-5 sm:p-6 space-y-6 shadow-xs">
+      <section className="no-print bg-white rounded-xl border border-[#E5E7EB] p-4 sm:p-6 space-y-5 sm:space-y-6 shadow-xs">
         {/* Header Row */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#E5E7EB] pb-4">
           <div className="space-y-1">
-            <div className="flex items-center gap-2 text-xs font-semibold text-[#111A5E]">
+            <div className="flex flex-wrap items-center gap-1.5 text-[11px] sm:text-xs font-semibold text-[#111A5E]">
               <span>منصة زيد الرقمية</span>
               <span>·</span>
               <span>توزيع المنهج والخطط الأسبوعية ١٤٤٨هـ (٢٠٢٦ - ٢٠٢٧م)</span>
-              <span>·</span>
-              <span>المرحلة الابتدائية</span>
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
-              <Calendar className="w-6 h-6 text-[#111A5E]" />
+            <h1 className="text-lg sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
+              <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-[#111A5E] shrink-0" />
               <span>توزيع المنهج الدراسي والخطط الأسبوعية — المرحلة الابتدائية</span>
             </h1>
             <p className="text-xs sm:text-sm text-slate-600">

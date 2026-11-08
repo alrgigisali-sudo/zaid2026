@@ -59,37 +59,37 @@ export function PlatformOverviewHome({ onOpenTeacherProfile }: OverviewProps) {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10 text-right" dir="rtl">
+    <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-6 sm:space-y-10 text-right overflow-x-hidden" dir="rtl">
       {/* 1. Hero Section — About Zaid Digital Platform & Services */}
-      <section className="bg-white rounded-2xl border border-[#E5E7EB] p-6 sm:p-10 shadow-xs">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-7 space-y-4">
-            <div className="inline-flex items-center gap-2 text-xs font-bold text-[#080C3A] bg-[#EEF1FA] border border-[#C5D0F0] px-3 py-1.5 rounded-lg">
-              <ShieldCheck className="w-4 h-4 text-[#111A5E]" />
+      <section className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-10 shadow-xs">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
+          <div className="lg:col-span-7 space-y-3.5 sm:space-y-4">
+            <div className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-bold text-[#080C3A] bg-[#EEF1FA] border border-[#C5D0F0] px-2.5 sm:px-3 py-1.5 rounded-lg">
+              <ShieldCheck className="w-4 h-4 text-[#111A5E] shrink-0" />
               <span>منصة زيد الرقمية (ZAID) — الحل المتكامل للمدارس والمعلمين والمعلمات</span>
             </div>
 
-            <h1 className="text-2xl sm:text-4xl font-black text-slate-900 leading-tight tracking-tight">
+            <h1 className="text-xl sm:text-4xl font-black text-slate-900 leading-snug sm:leading-tight tracking-tight">
               منصة رقمية موحدة لإعداد السجلات والنماذج المدرسية وشواهد الأداء الوظيفي وتوزيع المنهج
             </h1>
 
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+            <p className="text-slate-600 text-xs sm:text-base leading-relaxed">
               توفّر <strong className="text-slate-900">منصة زيد الرقمية</strong> بيئة عمل احترافية تجمع كافة احتياجات الإدارة المدرسية والهيئة التعليمية في مكان واحد؛ حيث تُدرج بيانات المدرسة أو المعلم تلقائياً في الترويسة الرسمية لجميع النماذج والسجلات والخطط مع إمكانية التعديل المباشر والطباعة الفورية بمقاس A4 المعتمد أو الحفظ كملف PDF.
             </p>
 
             {/* Primary Quick Navigation Buttons */}
-            <div className="pt-2 flex flex-wrap items-center gap-3">
+            <div className="pt-2 grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2.5 sm:gap-3">
               <button
                 type="button"
                 onClick={() => {
                   setPortal("school");
                   setSchoolRoute("home");
                 }}
-                className="inline-flex items-center gap-2 bg-[#080C3A] hover:bg-[#06092B] text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl transition-colors cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 sm:gap-2 bg-[#080C3A] hover:bg-[#06092B] text-white font-bold text-xs sm:text-sm px-3.5 sm:px-5 py-3 rounded-xl transition-colors cursor-pointer"
               >
-                <Building2 className="w-4 h-4 text-[#C5D0F0]" />
-                <span>دخول قسم المدرسة</span>
-                <ArrowLeft className="w-4 h-4" />
+                <Building2 className="w-4 h-4 text-[#C5D0F0] shrink-0" />
+                <span>قسم المدرسة</span>
+                <ArrowLeft className="w-3.5 h-3.5 shrink-0" />
               </button>
 
               <button
@@ -98,19 +98,19 @@ export function PlatformOverviewHome({ onOpenTeacherProfile }: OverviewProps) {
                   setPortal("teacher");
                   setTeacherTab("landing");
                 }}
-                className="inline-flex items-center gap-2 bg-[#111A5E] hover:bg-[#080C3A] text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl transition-colors cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 sm:gap-2 bg-[#111A5E] hover:bg-[#080C3A] text-white font-bold text-xs sm:text-sm px-3.5 sm:px-5 py-3 rounded-xl transition-colors cursor-pointer"
               >
-                <GraduationCap className="w-4 h-4 text-[#C5D0F0]" />
-                <span>دخول قسم المعلم</span>
-                <ArrowLeft className="w-4 h-4" />
+                <GraduationCap className="w-4 h-4 text-[#C5D0F0] shrink-0" />
+                <span>قسم المعلم</span>
+                <ArrowLeft className="w-3.5 h-3.5 shrink-0" />
               </button>
 
               <button
                 type="button"
                 onClick={() => setPortal("subscription")}
-                className="inline-flex items-center gap-2 bg-white hover:bg-[#EEF1FA] text-slate-800 hover:text-[#080C3A] border border-[#D1D5DB] hover:border-[#111A5E] font-bold text-xs sm:text-sm px-5 py-3 rounded-xl transition-colors cursor-pointer"
+                className="col-span-2 sm:col-span-1 inline-flex items-center justify-center gap-2 bg-white hover:bg-[#EEF1FA] text-slate-800 hover:text-[#080C3A] border border-[#D1D5DB] hover:border-[#111A5E] font-bold text-xs sm:text-sm px-4 sm:px-5 py-3 rounded-xl transition-colors cursor-pointer"
               >
-                <KeyRound className="w-4 h-4 text-[#111A5E]" />
+                <KeyRound className="w-4 h-4 text-[#111A5E] shrink-0" />
                 <span>قسم الاشتراك والتفعيل</span>
               </button>
             </div>

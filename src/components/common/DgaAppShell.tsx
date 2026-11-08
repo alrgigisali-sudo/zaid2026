@@ -530,145 +530,217 @@ export function DgaAppShell({ children, onOpenTeacherProfile }: DgaAppShellProps
   const showSidebar = portal === "school" || portal === "teacher";
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F9FAFB] text-slate-900 font-sans antialiased" dir="rtl">
+    <div className="min-h-screen flex flex-col bg-[#F9FAFB] text-slate-900 font-sans antialiased overflow-x-hidden" dir="rtl">
       {/* Main Top Navigation Header */}
       <header className="dga-header no-print sticky top-0 z-30 bg-white border-b border-[#E5E7EB]">
-        <div className="max-w-[1600px] mx-auto px-4 lg:px-6 h-16 flex items-center justify-between gap-3">
-          {/* Right: Mobile Drawer Trigger + Brand + Active Breadcrumb */}
-          <div className="flex items-center gap-3 min-w-0">
-            {showSidebar && (
+        <div className="max-w-[1600px] mx-auto px-3 sm:px-4 lg:px-6">
+          {/* Row 1: Brand + Desktop Switcher + Quick Actions */}
+          <div className="h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-3">
+            {/* Right: Mobile Drawer Trigger + Brand + Active Breadcrumb */}
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+              {showSidebar && (
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(true)}
+                  className="lg:hidden min-h-[40px] min-w-[40px] flex items-center justify-center rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] text-slate-800 hover:bg-slate-100 cursor-pointer shrink-0"
+                  aria-label="فتح القائمة الجانبية"
+                >
+                  <Menu className="w-5 h-5" />
+                </button>
+              )}
+
               <button
                 type="button"
-                onClick={() => setMobileMenuOpen(true)}
-                className="lg:hidden p-2 rounded-lg border border-[#E5E7EB] text-slate-700 hover:bg-slate-100 cursor-pointer"
-                aria-label="فتح القائمة الجانبية"
+                onClick={() => {
+                  setPortal("overview");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className="text-right cursor-pointer shrink-0"
               >
-                <Menu className="w-5 h-5" />
+                <PlatformLogo size="sm" />
               </button>
-            )}
 
-            <button
-              type="button"
-              onClick={() => {
-                setPortal("overview");
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              className="text-right cursor-pointer shrink-0"
-            >
-              <PlatformLogo size="sm" />
-            </button>
+              {showSidebar && (
+                <div className="hidden xl:flex items-center gap-2 text-xs text-slate-500 border-r border-[#E5E7EB] pr-3 mr-1 truncate">
+                  <span className="font-semibold text-slate-700">
+                    {portal === "school" ? "قسم المدرسة" : "قسم المعلم"}
+                  </span>
+                  <ChevronLeft className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                  <span className="font-bold text-[#111A5E] truncate">{currentBreadcrumb}</span>
+                </div>
+              )}
+            </div>
 
-            {showSidebar && (
-              <div className="hidden xl:flex items-center gap-2 text-xs text-slate-500 border-r border-[#E5E7EB] pr-3 mr-1 truncate">
-                <span className="font-semibold text-slate-700">
-                  {portal === "school" ? "قسم المدرسة" : "قسم المعلم"}
-                </span>
-                <ChevronLeft className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                <span className="font-bold text-[#111A5E] truncate">{currentBreadcrumb}</span>
-              </div>
-            )}
-          </div>
-
-          {/* Center: Unified Segmented Portal Switcher (Home + 3 Sections) */}
-          <div className="flex items-center bg-[#F3F4F6] p-1 rounded-lg border border-[#E5E7EB] shrink-0 overflow-x-auto max-w-full">
-            <button
-              type="button"
-              onClick={() => {
-                setPortal("overview");
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              className={`flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-md text-xs font-bold transition-colors cursor-pointer whitespace-nowrap ${
-                portal === "overview"
-                  ? "bg-[#111A5E] text-white shadow-xs"
-                  : "text-slate-700 hover:text-slate-900"
-              }`}
-            >
-              <Home className="w-3.5 h-3.5" />
-              <span>الرئيسية</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setPortal("school");
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              className={`flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-md text-xs font-bold transition-colors cursor-pointer whitespace-nowrap ${
-                portal === "school"
-                  ? "bg-[#111A5E] text-white shadow-xs"
-                  : "text-slate-700 hover:text-slate-900"
-              }`}
-            >
-              <Building2 className="w-3.5 h-3.5" />
-              <span>قسم المدرسة</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setPortal("teacher");
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              className={`flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-md text-xs font-bold transition-colors cursor-pointer whitespace-nowrap ${
-                portal === "teacher"
-                  ? "bg-[#111A5E] text-white shadow-xs"
-                  : "text-slate-700 hover:text-slate-900"
-              }`}
-            >
-              <GraduationCap className="w-3.5 h-3.5" />
-              <span>قسم المعلم</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setPortal("subscription");
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              className={`flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-md text-xs font-bold transition-colors cursor-pointer whitespace-nowrap ${
-                portal === "subscription"
-                  ? "bg-[#111A5E] text-white shadow-xs"
-                  : "text-slate-700 hover:text-slate-900"
-              }`}
-            >
-              <KeyRound className="w-3.5 h-3.5" />
-              <span>الاشتراك والتفعيل</span>
-            </button>
-          </div>
-
-          {/* Left: Contextual Profile / Settings + Subscription Button */}
-          <div className="hidden md:flex items-center gap-2 shrink-0">
-            {portal === "teacher" ? (
+            {/* Center: Desktop Unified Segmented Portal Switcher (Hidden on phones, shown on md+) */}
+            <div className="hidden md:flex items-center bg-[#F3F4F6] p-1 rounded-xl border border-[#E5E7EB] shrink-0">
               <button
                 type="button"
-                onClick={onOpenTeacherProfile}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#E5E7EB] bg-white hover:border-[#111A5E] text-xs font-semibold text-slate-700 hover:text-[#080C3A] transition-colors cursor-pointer"
+                onClick={() => {
+                  setPortal("overview");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer whitespace-nowrap ${
+                  portal === "overview"
+                    ? "bg-[#111A5E] text-white shadow-xs"
+                    : "text-slate-700 hover:text-slate-900"
+                }`}
               >
-                <User className="w-3.5 h-3.5 text-[#111A5E]" />
-                <span>بيانات المعلم</span>
+                <Home className="w-3.5 h-3.5" />
+                <span>الرئيسية</span>
               </button>
-            ) : (
+
               <button
                 type="button"
                 onClick={() => {
                   setPortal("school");
-                  setSchoolRoute("settings");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#E5E7EB] bg-white hover:border-[#111A5E] text-xs font-semibold text-slate-700 hover:text-[#080C3A] transition-colors cursor-pointer"
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer whitespace-nowrap ${
+                  portal === "school"
+                    ? "bg-[#111A5E] text-white shadow-xs"
+                    : "text-slate-700 hover:text-slate-900"
+                }`}
               >
-                <Settings className="w-3.5 h-3.5 text-[#111A5E]" />
-                <span>إعدادات المدرسة</span>
+                <Building2 className="w-3.5 h-3.5" />
+                <span>قسم المدرسة</span>
               </button>
-            )}
 
-            <button
-              type="button"
-              onClick={() => setPortal("subscription")}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#111A5E] hover:bg-[#080C3A] text-white text-xs font-bold transition-colors cursor-pointer"
-            >
-              <KeyRound className="w-3.5 h-3.5" />
-              <span>تفعيل الكود</span>
-            </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setPortal("teacher");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer whitespace-nowrap ${
+                  portal === "teacher"
+                    ? "bg-[#111A5E] text-white shadow-xs"
+                    : "text-slate-700 hover:text-slate-900"
+                }`}
+              >
+                <GraduationCap className="w-3.5 h-3.5" />
+                <span>قسم المعلم</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setPortal("subscription");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer whitespace-nowrap ${
+                  portal === "subscription"
+                    ? "bg-[#111A5E] text-white shadow-xs"
+                    : "text-slate-700 hover:text-slate-900"
+                }`}
+              >
+                <KeyRound className="w-3.5 h-3.5" />
+                <span>الاشتراك والتفعيل</span>
+              </button>
+            </div>
+
+            {/* Left: Contextual Profile / Settings + Subscription Button */}
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              {portal === "teacher" ? (
+                <button
+                  type="button"
+                  onClick={onOpenTeacherProfile}
+                  className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl border border-[#E5E7EB] bg-white hover:border-[#111A5E] text-xs font-bold text-slate-700 hover:text-[#080C3A] transition-colors cursor-pointer whitespace-nowrap"
+                >
+                  <User className="w-3.5 h-3.5 text-[#111A5E] shrink-0" />
+                  <span className="hidden sm:inline">بيانات المعلم</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPortal("school");
+                    setSchoolRoute("settings");
+                  }}
+                  className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl border border-[#E5E7EB] bg-white hover:border-[#111A5E] text-xs font-bold text-slate-700 hover:text-[#080C3A] transition-colors cursor-pointer whitespace-nowrap"
+                >
+                  <Settings className="w-3.5 h-3.5 text-[#111A5E] shrink-0" />
+                  <span className="hidden sm:inline">إعدادات المدرسة</span>
+                </button>
+              )}
+
+              <button
+                type="button"
+                onClick={() => setPortal("subscription")}
+                className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-xl bg-[#111A5E] hover:bg-[#080C3A] text-white text-xs font-bold transition-colors cursor-pointer whitespace-nowrap"
+              >
+                <KeyRound className="w-3.5 h-3.5 shrink-0" />
+                <span>تفعيل الكود</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Row 2 (Mobile Only): Full-Width 4-Column Portal Switcher Bar */}
+          <div className="md:hidden pb-2.5 pt-0.5">
+            <div className="grid grid-cols-4 gap-1 bg-[#F3F4F6] p-1 rounded-xl border border-[#E5E7EB]">
+              <button
+                type="button"
+                onClick={() => {
+                  setPortal("overview");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className={`flex items-center justify-center gap-1 py-2 px-1 rounded-lg text-[11px] font-bold transition-colors cursor-pointer whitespace-nowrap ${
+                  portal === "overview"
+                    ? "bg-[#111A5E] text-white shadow-xs"
+                    : "text-slate-700 hover:text-slate-900"
+                }`}
+              >
+                <Home className="w-3.5 h-3.5 shrink-0" />
+                <span>الرئيسية</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setPortal("school");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className={`flex items-center justify-center gap-1 py-2 px-1 rounded-lg text-[11px] font-bold transition-colors cursor-pointer whitespace-nowrap ${
+                  portal === "school"
+                    ? "bg-[#111A5E] text-white shadow-xs"
+                    : "text-slate-700 hover:text-slate-900"
+                }`}
+              >
+                <Building2 className="w-3.5 h-3.5 shrink-0" />
+                <span>المدرسة</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setPortal("teacher");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className={`flex items-center justify-center gap-1 py-2 px-1 rounded-lg text-[11px] font-bold transition-colors cursor-pointer whitespace-nowrap ${
+                  portal === "teacher"
+                    ? "bg-[#111A5E] text-white shadow-xs"
+                    : "text-slate-700 hover:text-slate-900"
+                }`}
+              >
+                <GraduationCap className="w-3.5 h-3.5 shrink-0" />
+                <span>المعلم</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setPortal("subscription");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className={`flex items-center justify-center gap-1 py-2 px-1 rounded-lg text-[11px] font-bold transition-colors cursor-pointer whitespace-nowrap ${
+                  portal === "subscription"
+                    ? "bg-[#111A5E] text-white shadow-xs"
+                    : "text-slate-700 hover:text-slate-900"
+                }`}
+              >
+                <KeyRound className="w-3.5 h-3.5 shrink-0" />
+                <span>الاشتراك</span>
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -695,7 +767,7 @@ export function DgaAppShell({ children, onOpenTeacherProfile }: DgaAppShellProps
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 cursor-pointer"
+                  className="min-h-[38px] min-w-[38px] flex items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -707,13 +779,33 @@ export function DgaAppShell({ children, onOpenTeacherProfile }: DgaAppShellProps
 
         {/* Main Content Viewport */}
         <div className="flex-1 min-w-0 flex flex-col">
+          {/* Mobile Quick Section Bar when inside School or Teacher portal */}
+          {showSidebar && (
+            <div className="lg:hidden no-print bg-white border-b border-[#E5E7EB] px-3 py-2 flex items-center justify-between gap-2">
+              <div className="flex items-center gap-1.5 min-w-0 text-xs">
+                <span className="font-semibold text-slate-500 shrink-0">
+                  {portal === "school" ? "قسم المدرسة:" : "قسم المعلم:"}
+                </span>
+                <span className="font-bold text-[#080C3A] truncate">{currentBreadcrumb}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(true)}
+                className="inline-flex items-center gap-1.5 bg-[#EEF1FA] text-[#080C3A] border border-[#C5D0F0] px-2.5 py-1.5 rounded-lg text-[11px] font-bold shrink-0 cursor-pointer"
+              >
+                <Menu className="w-3.5 h-3.5 text-[#111A5E]" />
+                <span>قائمة الأقسام</span>
+              </button>
+            </div>
+          )}
+
           {/* Subtle Contextual Status Bar (No-Print) */}
           {portal === "school" && !isSchoolActiveLicense && (
-            <div className="no-print bg-[#EEF1FA] border-b border-[#C5D0F0] px-4 py-2 text-xs text-[#080C3A] flex flex-wrap items-center justify-between gap-2">
-              <span>
+            <div className="no-print bg-[#EEF1FA] border-b border-[#C5D0F0] px-3 sm:px-4 py-2 text-[11px] sm:text-xs text-[#080C3A] flex flex-wrap items-center justify-between gap-2">
+              <span className="leading-relaxed">
                 وضع المعاينة المجانية: جميع النماذج مفتوحة للتجربة، وتُطبع مع علامة مائية خفيفة حتى يتم تفعيل ترخيص المدرسة.
               </span>
-              <div className="flex items-center gap-3 font-bold">
+              <div className="flex items-center gap-3 font-bold shrink-0">
                 <button
                   type="button"
                   onClick={() => setPortal("subscription")}
@@ -734,11 +826,11 @@ export function DgaAppShell({ children, onOpenTeacherProfile }: DgaAppShellProps
           )}
 
           {portal === "teacher" && !isTeacherSubscribed && (
-            <div className="no-print bg-[#EEF1FA] border-b border-[#C5D0F0] px-4 py-2 text-xs text-[#080C3A] flex flex-wrap items-center justify-between gap-2">
-              <span>
+            <div className="no-print bg-[#EEF1FA] border-b border-[#C5D0F0] px-3 sm:px-4 py-2 text-[11px] sm:text-xs text-[#080C3A] flex flex-wrap items-center justify-between gap-2">
+              <span className="leading-relaxed">
                 قسم المعلم (ملف الإنجاز 70 صفحة + توزيع المنهج + 311 قالب شاهد): متاح للمعاينة، ولتفعيل الطباعة الرسمية بدون علامة مائية أدخل كود التفعيل.
               </span>
-              <div className="flex items-center gap-3 font-bold">
+              <div className="flex items-center gap-3 font-bold shrink-0">
                 <button
                   type="button"
                   onClick={() => setPortal("subscription")}
@@ -758,7 +850,7 @@ export function DgaAppShell({ children, onOpenTeacherProfile }: DgaAppShellProps
             </div>
           )}
 
-          <main className="grow">{children}</main>
+          <main className="grow w-full max-w-full overflow-x-hidden">{children}</main>
 
           {/* Clean Institutional Footer */}
           <footer className="no-print border-t border-[#E5E7EB] bg-white py-5 px-6 text-xs text-slate-500 mt-auto">

@@ -90,42 +90,42 @@ export function SchoolRulesView() {
         </div>
 
         {/* Stage Toggle */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
-          <div className="flex items-center gap-2 bg-slate-100 p-1.5 rounded-xl">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+          <div className="grid grid-cols-2 sm:flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-xl w-full sm:w-auto">
             <button
               onClick={() => {
                 setActiveStage("primary");
                 if (selectedDegree > 4) setSelectedDegree(1);
               }}
-              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+              className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 activeStage === "primary"
                   ? "bg-white text-sky-900 shadow-xs"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              المرحلة الابتدائية (الدرجات 1 - 4)
+              الابتدائية (الدرجات 1 - 4)
             </button>
 
             <button
               onClick={() => setActiveStage("secondary")}
-              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+              className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 activeStage === "secondary"
                   ? "bg-white text-sky-900 shadow-xs"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              المرحلتان المتوسطة والثانوية (الدرجات 1 - 6)
+              المتوسطة والثانوية (1 - 6)
             </button>
           </div>
 
           {/* Search box */}
-          <div className="relative min-w-[260px] sm:w-80">
+          <div className="relative w-full sm:w-80">
             <input
               type="text"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
               placeholder="ابحث عن مخالفة… (مثال: شجار، جوال، تأخر)"
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl py-2 px-9 text-xs focus:outline-hidden focus:ring-2 focus:ring-sky-500 text-right"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl py-2 px-9 text-xs focus:outline-hidden focus:ring-2 focus:ring-sky-500 text-right m-0"
             />
             <Search className="w-4 h-4 text-slate-400 absolute right-3 top-2.5" />
           </div>

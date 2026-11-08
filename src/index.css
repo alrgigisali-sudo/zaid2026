@@ -100,6 +100,14 @@ body {
     display: block !important;
   }
 
+  .sheet-viewport-outer {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
   .sheet-viewport-wrapper {
     transform: none !important;
     width: auto !important;
@@ -202,6 +210,12 @@ body {
 }
 
 @media (max-width: 768px) {
+  html,
+  body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
   .preview-scroll {
     padding-left: 0.25rem !important;
     padding-right: 0.25rem !important;

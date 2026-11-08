@@ -109,15 +109,15 @@ export function TeacherPortfolio({ onOpenProfile }: Props) {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 text-right" dir="rtl">
+    <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4 sm:space-y-6 text-right overflow-x-hidden" dir="rtl">
       {/* Top Control Header */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-5 no-print">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-4 sm:p-6 space-y-4 sm:space-y-5 no-print">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 pb-4">
           <div className="space-y-1">
-            <p className="text-xs font-bold text-emerald-700">
+            <p className="text-[11px] sm:text-xs font-bold text-emerald-700">
               ملف إنجاز المعلم وفق عناصر تقييم الأداء الوظيفي الـ 11 (8 فصول · 70 صفحة رسمية)
             </p>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900">
+            <h1 className="text-xl sm:text-3xl font-black text-slate-900">
               ملف الإنجاز المهني الشامل (صفحة {currentPage.pageNumber} من 70)
             </h1>
             <p className="text-xs sm:text-sm text-slate-600">
@@ -127,14 +127,14 @@ export function TeacherPortfolio({ onOpenProfile }: Props) {
 
           <div className="shrink-0 flex items-center gap-2 flex-wrap">
             {/* Mode Switch: Full 70 vs Quick */}
-            <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-xl">
+            <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-xl w-full sm:w-auto">
               <button
                 type="button"
                 onClick={() => {
                   setPortfolioMode("full-70");
                   setSelectedChapter("all");
                 }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                className={`flex-1 sm:flex-initial px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
                   portfolioMode === "full-70"
                     ? "bg-emerald-800 text-white shadow-xs"
                     : "text-slate-700 hover:text-slate-950"
@@ -149,7 +149,7 @@ export function TeacherPortfolio({ onOpenProfile }: Props) {
                   setSelectedChapter("all");
                   setCurrentPageNum(1);
                 }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                className={`flex-1 sm:flex-initial px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
                   portfolioMode === "quick"
                     ? "bg-emerald-800 text-white shadow-xs"
                     : "text-slate-700 hover:text-slate-950"
@@ -217,12 +217,12 @@ export function TeacherPortfolio({ onOpenProfile }: Props) {
 
         {/* Page Navigator & Quick Jump Dropdown */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1">
-          <div className="flex items-center gap-2 grow">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-2 grow">
             <span className="text-xs font-bold text-slate-700 shrink-0">انتقال سريع للصفحة:</span>
             <select
               value={currentPage.pageNumber}
               onChange={e => setCurrentPageNum(Number(e.target.value))}
-              className="grow max-w-xl bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900"
+              className="w-full sm:max-w-xl bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 m-0"
             >
               {visiblePages.map(p => (
                 <option key={p.id} value={p.pageNumber}>
@@ -232,42 +232,44 @@ export function TeacherPortfolio({ onOpenProfile }: Props) {
             </select>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex flex-wrap items-center justify-between sm:justify-end gap-2 shrink-0">
             <button
               type="button"
               onClick={() => setIsPhotoPickerOpen(!isPhotoPickerOpen)}
               className="inline-flex items-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 px-3 py-2 rounded-xl text-xs font-bold cursor-pointer"
             >
-              <ImageIcon className="w-3.5 h-3.5 text-emerald-700" />
-              <span>تغيير صور الصفحة (مكتبة الـ 50)</span>
+              <ImageIcon className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+              <span>تغيير صور الصفحة</span>
             </button>
 
-            <button
-              type="button"
-              onClick={goPrev}
-              disabled={currentIndexInVisible <= 0}
-              className="inline-flex items-center gap-1 px-3 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-xs font-bold disabled:opacity-40 cursor-pointer"
-            >
-              <ChevronRight className="w-4 h-4" />
-              <span>السابقة</span>
-            </button>
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={goPrev}
+                disabled={currentIndexInVisible <= 0}
+                className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-xs font-bold disabled:opacity-40 cursor-pointer"
+              >
+                <ChevronRight className="w-4 h-4" />
+                <span>السابقة</span>
+              </button>
 
-            <span className="text-xs font-black text-slate-800 px-2 tabular-nums">
-              {currentPage.pageNumber} / 70
-            </span>
+              <span className="text-xs font-black text-slate-800 px-1.5 tabular-nums">
+                {currentPage.pageNumber} / 70
+              </span>
 
-            <button
-              type="button"
-              onClick={goNext}
-              disabled={
-                currentIndexInVisible < 0 ||
-                currentIndexInVisible >= visiblePages.length - 1
-              }
-              className="inline-flex items-center gap-1 px-3 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-xs font-bold disabled:opacity-40 cursor-pointer"
-            >
-              <span>التالية</span>
-              <ChevronLeft className="w-4 h-4" />
-            </button>
+              <button
+                type="button"
+                onClick={goNext}
+                disabled={
+                  currentIndexInVisible < 0 ||
+                  currentIndexInVisible >= visiblePages.length - 1
+                }
+                className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-xs font-bold disabled:opacity-40 cursor-pointer"
+              >
+                <span>التالية</span>
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
 
