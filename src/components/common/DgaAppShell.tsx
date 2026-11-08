@@ -781,7 +781,7 @@ export function DgaAppShell({ children, onOpenTeacherProfile }: DgaAppShellProps
         <div className="flex-1 min-w-0 flex flex-col">
           {/* Mobile Quick Section Bar when inside School or Teacher portal */}
           {showSidebar && (
-            <div className="lg:hidden no-print bg-white border-b border-[#E5E7EB] px-3 py-2 flex items-center justify-between gap-2">
+            <div className="lg:hidden no-print print:hidden bg-white border-b border-[#E5E7EB] px-3 py-2 flex items-center justify-between gap-2">
               <div className="flex items-center gap-1.5 min-w-0 text-xs">
                 <span className="font-semibold text-slate-500 shrink-0">
                   {portal === "school" ? "قسم المدرسة:" : "قسم المعلم:"}
@@ -801,7 +801,7 @@ export function DgaAppShell({ children, onOpenTeacherProfile }: DgaAppShellProps
 
           {/* Subtle Contextual Status Bar (No-Print) */}
           {portal === "school" && !isSchoolActiveLicense && (
-            <div className="no-print bg-[#EEF1FA] border-b border-[#C5D0F0] px-3 sm:px-4 py-2 text-[11px] sm:text-xs text-[#080C3A] flex flex-wrap items-center justify-between gap-2">
+            <div className="no-print print:hidden bg-[#EEF1FA] border-b border-[#C5D0F0] px-3 sm:px-4 py-2 text-[11px] sm:text-xs text-[#080C3A] flex flex-wrap items-center justify-between gap-2">
               <span className="leading-relaxed">
                 وضع المعاينة المجانية: جميع النماذج مفتوحة للتجربة، وتُطبع مع علامة مائية خفيفة حتى يتم تفعيل ترخيص المدرسة.
               </span>
@@ -826,7 +826,7 @@ export function DgaAppShell({ children, onOpenTeacherProfile }: DgaAppShellProps
           )}
 
           {portal === "teacher" && !isTeacherSubscribed && (
-            <div className="no-print bg-[#EEF1FA] border-b border-[#C5D0F0] px-3 sm:px-4 py-2 text-[11px] sm:text-xs text-[#080C3A] flex flex-wrap items-center justify-between gap-2">
+            <div className="no-print print:hidden bg-[#EEF1FA] border-b border-[#C5D0F0] px-3 sm:px-4 py-2 text-[11px] sm:text-xs text-[#080C3A] flex flex-wrap items-center justify-between gap-2">
               <span className="leading-relaxed">
                 قسم المعلم (ملف الإنجاز 70 صفحة + توزيع المنهج + 311 قالب شاهد): متاح للمعاينة، ولتفعيل الطباعة الرسمية بدون علامة مائية أدخل كود التفعيل.
               </span>

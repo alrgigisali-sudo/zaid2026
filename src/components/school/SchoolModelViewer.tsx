@@ -17,18 +17,11 @@ interface Props {
 }
 
 export function SchoolModelViewer({ title, intro, forms }: Props) {
-  const { setSchoolRoute, students, replaceGenderText, genderWords } = usePlatform();
+  const { setSchoolRoute, replaceGenderText } = usePlatform();
 
   const [selectedFormId, setSelectedFormId] = useState<string>(() => {
     return forms[0]?.id || "";
   });
-
-  const [selectedStudentIdx, setSelectedStudentIdx] = useState<string>("");
-
-  const selectedStudent = useMemo(() => {
-    if (selectedStudentIdx === "") return null;
-    return students[Number(selectedStudentIdx)] || null;
-  }, [selectedStudentIdx, students]);
 
   const activeForms = useMemo(() => {
     if (selectedFormId === "__all") return forms;
@@ -62,58 +55,28 @@ export function SchoolModelViewer({ title, intro, forms }: Props) {
           </div>
         </div>
 
-        {/* Toolbar selectors */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* Form Selector */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-              النموذج أو السجل المطلوب ({forms.length} نماذج متوفرة):
-            </label>
-            <select
-              value={selectedFormId}
-              onChange={e => setSelectedFormId(e.target.value)}
-              className="w-full bg-[#F9FAFB] border border-[#D1D5DB] rounded-lg px-3.5 py-2.5 text-sm font-semibold text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#111A5E] text-right cursor-pointer m-0"
-            >
-              {forms.map(f => (
-                <option key={f.id} value={f.id}>
-                  {replaceGenderText(f.title)} {f.landscape ? "— (أفقي)" : ""}
-                </option>
-              ))}
-              <option value="__all">كل النماذج دفعة واحدة ({forms.length} نماذج)</option>
-            </select>
-          </div>
-
-          {/* Student Selector */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-              {genderWords.studentSlash} (للنماذج التي تتطلب اسماً):
-            </label>
-            <select
-              value={selectedStudentIdx}
-              onChange={e => setSelectedStudentIdx(e.target.value)}
-              className="w-full bg-[#F9FAFB] border border-[#D1D5DB] rounded-lg px-3.5 py-2.5 text-sm font-semibold text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#111A5E] text-right cursor-pointer m-0"
-            >
-              <option value="">بدون اسم — نموذج فارغ للتعبئة اليدوية</option>
-              {students.map((s, idx) => (
-                <option key={s.id} value={idx}>
-                  {s.name} ({s.grade} - {s.cls})
-                </option>
-              ))}
-            </select>
-          </div>
+        {/* Toolbar selector */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+            النموذج أو السجل المطلوب ({forms.length} نماذج متوفرة):
+          </label>
+          <select
+            value={selectedFormId}
+            onChange={e => setSelectedFormId(e.target.value)}
+            className="w-full bg-[#F9FAFB] border border-[#D1D5DB] rounded-lg px-3.5 py-2.5 text-sm font-semibold text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#111A5E] text-right cursor-pointer m-0"
+          >
+            {forms.map(f => (
+              <option key={f.id} value={f.id}>
+                {replaceGenderText(f.title)} {f.landscape ? "— (أفقي)" : ""}
+              </option>
+            ))}
+            <option value="__all">كل النماذج دفعة واحدة ({forms.length} نماذج)</option>
+          </select>
         </div>
 
         {/* Hint bar */}
-        <div className="flex flex-wrap items-center justify-between text-xs text-slate-500 pt-2">
-          <span>
-            إرشاد: يمكنك النقر مباشرة على أي حقل أو جدول داخل ورقة A4 أدناه وتعديل النصوص قبل الطباعة أو الحفظ كـ PDF.
-          </span>
-          {selectedStudent && (
-            <span className="font-bold text-[#080C3A] flex items-center gap-1">
-              <CheckCircle2 className="w-3.5 h-3.5 text-[#111A5E]" />
-              تم إدراج بيانات: {selectedStudent.name}
-            </span>
-          )}
+        <div className="text-xs text-slate-500 pt-1">
+          إرشاد: يمكنك النقر مباشرة على أي حقل أو جدول داخل ورقة A4 أدناه وتعديل النصوص قبل الطباعة أو الحفظ كـ PDF.
         </div>
       </div>
 
@@ -123,9 +86,9 @@ export function SchoolModelViewer({ title, intro, forms }: Props) {
           <div className="space-y-8 w-full flex flex-col items-center">
             {activeForms.map((f, i) => (
               <SchoolSheetRenderer
-                key={f.id + (selectedStudent?.id || "")}
+                key={f.id}
                 form={f}
-                student={selectedStudent}
+                student={null}
                 pageNumber={i + 1}
                 totalPages={activeForms.length}
               />
