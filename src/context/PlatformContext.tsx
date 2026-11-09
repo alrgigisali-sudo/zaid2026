@@ -161,6 +161,11 @@ interface PlatformContextType {
   isAdminModalOpen: boolean;
   setIsAdminModalOpen: (open: boolean) => void;
   openAdminModal: () => void;
+
+  // Backup & Privacy Management
+  exportBackupData: () => void;
+  importBackupData: (jsonStr: string) => { ok: boolean; message: string };
+  clearAllPlatformData: () => void;
 }
 
 const DEFAULT_SCHOOL_SETTINGS: SchoolSettings = {
@@ -444,6 +449,108 @@ export function PlatformProvider({ children }: { children: React.ReactNode }) {
       .replace(/{healthMentor}/g, genderWords.healthMentor);
   };
 
+  const exportBackupData = () => {
+    const backupObj = {
+      app: "ZAID_DIGITAL_PLATFORM",
+      version: "1.0",
+      timestamp: new Date().toISOString(),
+      schoolSettings,
+      teacherProfile,
+      students,
+      savedWitnesses,
+      licenses: {
+        school: isSchoolSubscribed ? localStorage.getItem("kp-school-license") : null,
+        teacher: isTeacherSubscribed ? localStorage.getItem("kp-teacher-license") : null,
+      },
+      customCurriculumEdits: localStorage.getItem("zaid-primary-curriculum-edits-v1"),
+      customWeeklyPlanMeta: localStorage.getItem("zaid-primary-weekly-meta-v1"),
+    };
+
+    const jsonStr = JSON.stringify(backupObj, null, 2);
+    const blob = new Blob([jsonStr], { type: "application/json;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    const dateStr = new Date().toISOString().split("T")[0];
+    link.href = url;
+    link.download = `zaid-platform-backup-${dateStr}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const importBackupData = (jsonStr: string): { ok: boolean; message: string } => {
+    try {
+      const data = JSON.parse(jsonStr);
+      if (!data || typeof data !== "object") {
+        return { ok: false, message: "ملف النسخة الاحتياطية غير صالح." };
+      }
+
+      if (data.schoolSettings) {
+        setSchoolSettings({ ...DEFAULT_SCHOOL_SETTINGS, ...data.schoolSettings });
+      }
+      if (data.teacherProfile) {
+        setTeacherProfile({ ...DEFAULT_TEACHER_PROFILE, ...data.teacherProfile });
+      }
+      if (Array.isArray(data.students)) {
+        setStudents(data.students);
+      }
+      if (Array.isArray(data.savedWitnesses)) {
+        setSavedWitnesses(data.savedWitnesses);
+      }
+      if (data.customCurriculumEdits) {
+        localStorage.setItem(
+          "zaid-primary-curriculum-edits-v1",
+          typeof data.customCurriculumEdits === "string"
+            ? data.customCurriculumEdits
+            : JSON.stringify(data.customCurriculumEdits)
+        );
+      }
+      if (data.customWeeklyPlanMeta) {
+        localStorage.setItem(
+          "zaid-primary-weekly-meta-v1",
+          typeof data.customWeeklyPlanMeta === "string"
+            ? data.customWeeklyPlanMeta
+            : JSON.stringify(data.customWeeklyPlanMeta)
+        );
+      }
+      if (data.licenses) {
+        if (data.licenses.school) {
+          localStorage.setItem(
+            "kp-school-license",
+            typeof data.licenses.school === "string"
+              ? data.licenses.school
+              : JSON.stringify(data.licenses.school)
+          );
+          setIsSchoolSubscribed(true);
+        }
+        if (data.licenses.teacher) {
+          localStorage.setItem(
+            "kp-teacher-license",
+            typeof data.licenses.teacher === "string"
+              ? data.licenses.teacher
+              : JSON.stringify(data.licenses.teacher)
+          );
+          setIsTeacherSubscribed(true);
+        }
+      }
+
+      return { ok: true, message: "تمت استعادة النسخة الاحتياطية بنجاح وتحديث كافة بياناتك." };
+    } catch (err) {
+      return { ok: false, message: "فشل استيراد الملف: صيغة الملف غير مدموجة أو تالفة." };
+    }
+  };
+
+  const clearAllPlatformData = () => {
+    try {
+      localStorage.clear();
+    } catch {}
+    setSchoolSettings(DEFAULT_SCHOOL_SETTINGS);
+    setTeacherProfile(DEFAULT_TEACHER_PROFILE);
+    setStudents(SAMPLE_STUDENTS);
+    setSavedWitnesses(SEED_WITNESSES);
+    setIsSchoolSubscribed(false);
+    setIsTeacherSubscribed(false);
+  };
+
   return (
     <PlatformContext.Provider
       value={{
@@ -485,7 +592,10 @@ export function PlatformProvider({ children }: { children: React.ReactNode }) {
         openSubscriptionModal: () => setIsSubscriptionModalOpen(true),
         isAdminModalOpen,
         setIsAdminModalOpen,
-        openAdminModal: () => setIsAdminModalOpen(true)
+        openAdminModal: () => setIsAdminModalOpen(true),
+        exportBackupData,
+        importBackupData,
+        clearAllPlatformData,
       }}
     >
       {children}

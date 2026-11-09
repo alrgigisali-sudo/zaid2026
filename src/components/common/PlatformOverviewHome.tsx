@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { usePlatform, SchoolRoute, TeacherTab } from "../../context/PlatformContext";
 import { KHADAMATI_CONFIG } from "../../data/schoolModels";
 import { TEACHER_CONFIG } from "../../data/teacherData";
@@ -28,7 +28,12 @@ import {
   Calendar,
   BookOpen,
   MessageCircle,
-  Lock
+  Lock,
+  HardDriveDownload,
+  HardDriveUpload,
+  Trash2,
+  AlertTriangle,
+  FileJson
 } from "lucide-react";
 
 interface OverviewProps {
@@ -43,8 +48,39 @@ export function PlatformOverviewHome({ onOpenTeacherProfile }: OverviewProps) {
     schoolSettings,
     teacherProfile,
     isSchoolSubscribed,
-    isTeacherSubscribed
+    isTeacherSubscribed,
+    exportBackupData,
+    importBackupData,
+    clearAllPlatformData
   } = usePlatform();
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [importMsg, setImportMsg] = useState<{ text: string; type: "success" | "error" | "" }>({
+    text: "",
+    type: ""
+  });
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+
+  const handleFileImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const content = event.target?.result as string;
+      if (content) {
+        const res = importBackupData(content);
+        setImportMsg({
+          text: res.message,
+          type: res.ok ? "success" : "error"
+        });
+      }
+    };
+    reader.readAsText(file);
+    if (e.target) {
+      e.target.value = "";
+    }
+  };
 
   const navigateToSchoolService = (route: SchoolRoute) => {
     setPortal("school");
@@ -568,6 +604,134 @@ export function PlatformOverviewHome({ onOpenTeacherProfile }: OverviewProps) {
           </div>
         </div>
       </section>
+
+      {/* 3. Backup & Privacy Section (النسخة الاحتياطية ونقل البيانات والخصوصية) */}
+      <section className="bg-white rounded-2xl border border-[#E5E7EB] p-6 sm:p-8 space-y-6 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E5E7EB] pb-4">
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-2 text-xs font-bold text-[#080C3A] bg-[#EEF1FA] border border-[#C5D0F0] px-3 py-1 rounded-lg">
+              <ShieldCheck className="w-4 h-4 text-[#111A5E]" />
+              <span>أمان وخصوصية البيانات</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 mt-1">
+              النسخة الاحتياطية ونقل البيانات
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              صدّر نسخة شاملة للاحتفاظ ببياناتك أو لنقلها إلى جهاز آخر، ثم استورد الملف من الجهاز الجديد.
+            </p>
+          </div>
+        </div>
+
+        {/* Red / Pink Privacy Alert Box */}
+        <div className="p-5 rounded-2xl bg-red-50/70 border border-red-200 space-y-2 text-right">
+          <h3 className="text-xs sm:text-sm font-black text-red-900 flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-red-700 shrink-0" />
+            <span>تنبيه مهم حول خصوصية بياناتك</span>
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+            أسماء المديرين والوكلاء والمعلمين والطلاب والبيانات الأخرى محفوظة على جهازك فقط ولا تُرسل إلى منصة زيد أو أي خوادم خارجية. يمكنك إزالة هذه البيانات بحذف بيانات المتصفح، وللانتقال إلى جهاز جديد صدّر نسخة احتياطية شاملة ثم استوردها هناك.
+          </p>
+        </div>
+
+        {/* Action Buttons Row */}
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={exportBackupData}
+            className="inline-flex items-center gap-2 bg-[#080C3A] hover:bg-[#06092B] text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl transition-colors cursor-pointer"
+          >
+            <HardDriveDownload className="w-4 h-4 text-[#C5D0F0]" />
+            <span>تصدير نسخة احتياطية شاملة</span>
+          </button>
+
+          <input
+            type="file"
+            ref={fileInputRef}
+            accept=".json,application/json"
+            onChange={handleFileImport}
+            className="hidden"
+          />
+
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="inline-flex items-center gap-2 bg-white hover:bg-[#EEF1FA] text-[#080C3A] border border-[#111A5E] font-bold text-xs sm:text-sm px-5 py-3 rounded-xl transition-colors cursor-pointer"
+          >
+            <HardDriveUpload className="w-4 h-4 text-[#111A5E]" />
+            <span>استيراد نسخة احتياطية</span>
+          </button>
+        </div>
+
+        {importMsg.text && (
+          <div
+            className={`p-3 rounded-xl text-xs font-bold ${
+              importMsg.type === "success"
+                ? "bg-[#EEF1FA] text-[#080C3A] border border-[#C5D0F0]"
+                : "bg-red-50 text-red-700 border border-red-200"
+            }`}
+          >
+            {importMsg.text}
+          </div>
+        )}
+
+        {/* Reset / Clear All Settings and Data */}
+        <div className="pt-6 border-t border-[#E5E7EB] space-y-3">
+          <div className="space-y-1">
+            <h3 className="text-sm sm:text-base font-black text-red-700">
+              حذف جميع الإعدادات والبيانات
+            </h3>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              حذف جميع إعدادات وبيانات المدرسة (الطلاب، المعلمون، المدخلات) بشكل نهائي من هذا الجهاز.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setShowDeleteModal(true)}
+            className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-colors cursor-pointer"
+          >
+            <Trash2 className="w-4 h-4" />
+            <span>حذف جميع الإعدادات والبيانات</span>
+          </button>
+        </div>
+      </section>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4 no-print text-right" dir="rtl">
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 max-w-md w-full space-y-4 shadow-2xl">
+            <div className="flex items-center gap-2 text-red-600 font-black text-base">
+              <AlertTriangle className="w-5 h-5 shrink-0" />
+              <span>تأكيد حذف جميع البيانات من الجهاز</span>
+            </div>
+
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              هل أنت تأكيد من رغبتك في حذف جميع إعدادات وبيانات المدرسة والطلاب والتقارير المحفوظة من هذا الجهاز بشكل نهائي؟ لن تتمكن من استعادتها إلا إذا كانت لديك نسخة احتياطية مصدرة.
+            </p>
+
+            <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => setShowDeleteModal(false)}
+                className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 cursor-pointer"
+              >
+                إلغاء
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  clearAllPlatformData();
+                  setShowDeleteModal(false);
+                  setImportMsg({ text: "تم حذف جميع البيانات والإعدادات بنجاح وإعادة ضبط المنصة.", type: "success" });
+                }}
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-red-600 hover:bg-red-700 text-white cursor-pointer"
+              >
+                تأكيد الحذف النهائي
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
