@@ -132,7 +132,7 @@ export const SheetContainer: React.FC<SheetContainerProps> = ({
     <div ref={containerRef} className={`w-full max-w-full flex flex-col items-center overflow-hidden ${className}`}>
       {/* Responsive Toolbar */}
       {showToolbar && (
-        <div className="no-print w-full max-w-4xl mx-auto mb-3 p-2.5 sm:px-3.5 sm:py-2.5 bg-[#080C3A] text-white rounded-2xl shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs select-none border border-[#111A5E]">
+        <div className="no-print print:hidden w-full max-w-4xl mx-auto mb-3 p-2.5 sm:px-3.5 sm:py-2.5 bg-[#080C3A] text-white rounded-2xl shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs select-none border border-[#111A5E]">
           {/* Mode & Preset controls */}
           <div className="flex items-center justify-between sm:justify-start gap-1.5 flex-wrap">
             <div className="flex items-center gap-1.5">
